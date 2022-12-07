@@ -1,37 +1,41 @@
-import { StyleSheet, Text, View } from "react-native";
-import { Router, Route, Link } from "./react-router";
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Homescreen from'./components/home'
+import { Ionicons} from '@expo/vector-icons';
+import { MaterialIcons } from '@expo/vector-icons'; 
+import Frontpage from'./components/frontpage'
+import Firebasecamera from './components/firebasecamera'
+// import Firebase from'./components/firebase'
 
-const Home = () => <Text>Home</Text>;
+const screenOptions = ({ route }) => ({
+  tabBarIcon: ({ focused, color, size }) => {
+    let iconName;
 
-const About = () => <Text>About</Text>;
+    if (route.name === 'Home') {
+      iconName = 'sports-rugby';
+      return <MaterialIcons name={iconName} size={size} color={color} />;
+    } else if (route.name === 'Frontpage') {
+      iconName = 'md-trophy';
+      return <Ionicons name={iconName} size={size} color={color} />;
+    } else if (route.name === 'Firebasecamera') {
+      iconName = 'ios-camera';
+      return <Ionicons name={iconName} size={size} color={color} />;
+    }
 
-const App = () => (
-  <Router>
-    <View style={styles.container}>
-      <View style={styles.nav}>
-        <Link to="/">
-          <Text>Home</Text>
-        </Link>
-        <Link to="/about">
-          <Text>About</Text>
-        </Link>
-      </View>
-
-      <Route exact path="/" component={Home} />
-      <Route path="/about" component={About} />
-    </View>
-  </Router>
-);
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 25,
-    padding: 10,
-  },
-  nav: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-  },
+    return <Ionicons name={iconName} size={size} color={color} />;
+  }
 });
 
-export default App;
+const Tab = createBottomTabNavigator();
+export default function App() {
+  return (
+    <NavigationContainer>
+    <Tab.Navigator screenOptions={screenOptions}>
+        <Tab.Screen name="Frontpage" component={Frontpage} />
+        <Tab.Screen name="Home" component={Homescreen} />
+        <Tab.Screen name="Training Photos" component={Firebasecamera} />
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
+}
+
